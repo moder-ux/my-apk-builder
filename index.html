@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APK Forge — Build Android APKs from a Git URL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="scanline-overlay" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <header class="masthead">
+      <div class="masthead__mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 18c0 .55.45 1 1 1h1v2.5a1.5 1.5 0 0 0 3 0V19h2v2.5a1.5 1.5 0 0 0 3 0V19h1a1 1 0 0 0 1-1v-8H6v8Z" fill="currentColor"/>
+          <path d="M17.5 6.6 19 4.9a.6.6 0 1 0-.9-.8l-1.6 1.8A7 7 0 0 0 12 4.5a7 7 0 0 0-4.5 1.4L5.9 4.1a.6.6 0 1 0-.9.8L6.5 6.6A5.8 5.8 0 0 0 5 9h14a5.8 5.8 0 0 0-1.5-2.4ZM9.5 7.8a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Zm5 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <h1>APK Forge</h1>
+        <p class="masthead__sub">Point at a repo. Walk away with an install-ready APK.</p>
+      </div>
+    </header>
+
+    <section class="panel" id="build-panel">
+      <form id="build-form" class="build-form" autocomplete="off">
+        <label for="repo-url" class="field-label">Repository URL</label>
+        <div class="input-row">
+          <input
+            type="url"
+            id="repo-url"
+            name="repoUrl"
+            placeholder="https://replit.com/@yourname/your-android-project.git"
+            required
+          />
+          <button type="submit" id="build-btn" class="btn-primary">
+            <span class="btn-label">Build APK</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="field-hint">Needs a Gradle Android project at the repo root (a <code>gradlew</code> file must exist).</p>
+      </form>
+
+      <!-- Pipeline stepper: the signature element. Fills left-to-right as the build progresses. -->
+      <ol class="pipeline" id="pipeline" data-state="idle">
+        <li class="pipeline__step" data-step="cloning">
+          <span class="pipeline__dot"></span>
+          <span class="pipeline__label">Clone</span>
+        </li>
+        <li class="pipeline__step" data-step="compiling">
+          <span class="pipeline__dot"></span>
+          <span class="pipeline__label">Compile</span>
+        </li>
+        <li class="pipeline__step" data-step="packaging">
+          <span class="pipeline__dot"></span>
+          <span class="pipeline__label">Package</span>
+        </li>
+        <li class="pipeline__step" data-step="success">
+          <span class="pipeline__dot"></span>
+          <span class="pipeline__label">Ready</span>
+        </li>
+      </ol>
+
+      <!-- Terminal-style live log output -->
+      <div class="terminal" id="terminal" aria-live="polite">
+        <div class="terminal__bar">
+          <span class="terminal__dot terminal__dot--r"></span>
+          <span class="terminal__dot terminal__dot--y"></span>
+          <span class="terminal__dot terminal__dot--g"></span>
+          <span class="terminal__title">build.log</span>
+        </div>
+        <pre class="terminal__body" id="terminal-body"><span class="terminal__placeholder">Logs will stream here once a build starts…</span></pre>
+      </div>
+
+      <div class="result" id="result" hidden>
+        <div class="result__icon" id="result-icon"></div>
+        <div class="result__text">
+          <p class="result__title" id="result-title">Build succeeded</p>
+          <p class="result__sub" id="result-sub">Your APK is ready to install.</p>
+        </div>
+        <a id="download-link" class="btn-primary btn-download" href="#" download>Download APK</a>
+      </div>
+    </section>
+
+    <footer class="footnote">
+      Builds run server-side with Gradle. Only trusted repositories should be submitted.
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
